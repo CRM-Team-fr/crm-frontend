@@ -1,4 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
+
+
 function SalesDashboard() {
+
+
+    const navigate = useNavigate();
+
 
 
     return (
@@ -9,9 +17,43 @@ function SalesDashboard() {
             <h1>Salesperson Dashboard</h1>
 
 
-            <p>
-                View assigned customers and queries here.
-            </p>
+
+
+            <button onClick={() => navigate("/sales/customers")}>
+
+                Assigned Customers
+
+            </button>
+
+
+
+
+            <br /><br />
+
+
+
+
+            <button onClick={() => navigate("/sales/queries")}>
+
+                Customer Queries
+
+            </button>
+
+
+
+
+            <br /><br />
+
+
+
+
+            <button onClick={() => navigate("/sales/orders")}>
+
+                Customer Orders
+
+            </button>
+
+
 
 
         </div>
@@ -20,6 +62,7 @@ function SalesDashboard() {
 
 
 }
+
 
 
 export default SalesDashboard;

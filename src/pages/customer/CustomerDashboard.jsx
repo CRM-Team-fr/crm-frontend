@@ -1,4 +1,13 @@
+import { useNavigate } from "react-router-dom";
+
+
+
 function CustomerDashboard() {
+
+
+    const navigate = useNavigate();
+
+
 
 
     return (
@@ -9,12 +18,59 @@ function CustomerDashboard() {
             <h1>Customer Dashboard</h1>
 
 
-            <h2>Welcome Customer</h2>
 
 
-            <p>
-                Products, orders and invoices will appear here.
-            </p>
+            <button onClick={() => navigate("/customer/products")}>
+
+                Product Catalog
+
+            </button>
+
+
+
+
+            <br /><br />
+
+
+
+
+            <button onClick={() => navigate("/customer/orders")}>
+
+                My Orders
+
+            </button>
+
+
+
+
+            <br /><br />
+
+
+
+
+            <button onClick={() => navigate("/customer/invoices")}>
+
+                Invoices
+
+            </button>
+
+
+
+
+            <br /><br />
+
+
+
+
+
+            <button onClick={() => navigate("/customer/queries")}>
+
+                Queries
+
+            </button>
+
+
+
 
 
         </div>
@@ -23,6 +79,7 @@ function CustomerDashboard() {
 
 
 }
+
 
 
 export default CustomerDashboard;
