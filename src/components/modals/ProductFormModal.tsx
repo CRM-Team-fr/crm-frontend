@@ -74,17 +74,26 @@ export const ProductFormModal = ({ isOpen, onClose, product, onSuccess }: Produc
 
     try {
       const fd = new FormData()
+      // Required fields — always sent
       fd.append('name', formData.name)
       fd.append('SKU', formData.SKU.toUpperCase())
       fd.append('category', formData.category)
-      fd.append('description', formData.description)
       fd.append('sellingPrice', formData.sellingPrice)
-      fd.append('costPrice', formData.costPrice)
-      fd.append('tax', formData.tax)
       fd.append('unit', formData.unit)
-      fd.append('stock', formData.stock)
-      fd.append('minimumStock', formData.minimumStock)
       fd.append('status', formData.status)
+
+      // Optional fields — only append when the user actually filled them in.
+      // Empty strings would trip express-validator's isFloat / isInt guards.
+      const optional: Record<string, string> = {
+        description: formData.description,
+        costPrice: formData.costPrice,
+        tax: formData.tax,
+        stock: formData.stock,
+        minimumStock: formData.minimumStock,
+      }
+      for (const [k, v] of Object.entries(optional)) {
+        if (v !== '' && v != null) fd.append(k, v)
+      }
 
       if (imageFile) {
         fd.append('image', imageFile)
