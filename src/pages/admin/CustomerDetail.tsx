@@ -32,8 +32,27 @@ export const AdminCustomerDetail = () => {
 
   const [assigning, setAssigning] = useState(false)
   const [changingStatus, setChangingStatus] = useState(false)
+  const [markingVerified, setMarkingVerified] = useState(false)
+  const [verifyNotice, setVerifyNotice] = useState('')
   const [error, setError] = useState<string>('')
   const [selectedSalespersonId, setSelectedSalespersonId] = useState('')
+
+  const handleMarkVerified = async () => {
+    if (!data?.user?.phoneNumber) return
+    setError('')
+    setVerifyNotice('')
+    setMarkingVerified(true)
+    try {
+      await authApi.markCustomerOtpVerified(data.user.phoneNumber)
+      setVerifyNotice(
+        `${data.user.Name || 'Customer'} can now sign in once without OTP. Ask them to open the site and log in with ${data.user.phoneNumber}.`
+      )
+    } catch (err: any) {
+      setError(err?.response?.data?.message || 'Failed to send temporary login.')
+    } finally {
+      setMarkingVerified(false)
+    }
+  }
 
   const handleStatusChange = async (newStatus: 'approved' | 'suspended') => {
     if (!data?.user?.id) return
@@ -106,8 +125,25 @@ export const AdminCustomerDetail = () => {
               Reinstate
             </Button>
           )}
+          {data.user?.status === 'approved' && (
+            <Button
+              variant="outline"
+              size="sm"
+              loading={markingVerified}
+              onClick={handleMarkVerified}
+              title="Skip OTP for this customer's next login (useful when SMS delivery is blocked)"
+            >
+              Send temporary login
+            </Button>
+          )}
         </div>
       </div>
+
+      {verifyNotice && (
+        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm rounded-lg">
+          ✓ {verifyNotice}
+        </div>
+      )}
 
       {error && (
         <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
