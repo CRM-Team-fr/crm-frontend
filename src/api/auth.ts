@@ -143,8 +143,8 @@ export const authApi = {
     return response.data
   },
 
-  markCustomerOtpVerified: async (phoneNumber: string) => {
-    const response = await apiClient.post('/auth/admin/mark-customer-verified', { phoneNumber })
+  markCustomerOtpVerified: async (phoneNumber: string, enable = true) => {
+    const response = await apiClient.post('/auth/admin/mark-customer-verified', { phoneNumber, enable })
     return response.data
   },
 

@@ -37,18 +37,17 @@ export const AdminCustomerDetail = () => {
   const [error, setError] = useState<string>('')
   const [selectedSalespersonId, setSelectedSalespersonId] = useState('')
 
-  const handleMarkVerified = async () => {
+  const handleToggleBypass = async (enable: boolean) => {
     if (!data?.user?.phoneNumber) return
     setError('')
     setVerifyNotice('')
     setMarkingVerified(true)
     try {
-      await authApi.markCustomerOtpVerified(data.user.phoneNumber)
-      setVerifyNotice(
-        `${data.user.Name || 'Customer'} can now sign in once without OTP. Ask them to open the site and log in with ${data.user.phoneNumber}.`
-      )
+      const res = await authApi.markCustomerOtpVerified(data.user.phoneNumber, enable)
+      await refetch()
+      setVerifyNotice(res?.message || 'Updated.')
     } catch (err: any) {
-      setError(err?.response?.data?.message || 'Failed to send temporary login.')
+      setError(err?.response?.data?.message || 'Failed to update bypass state.')
     } finally {
       setMarkingVerified(false)
     }
@@ -125,17 +124,30 @@ export const AdminCustomerDetail = () => {
               Reinstate
             </Button>
           )}
-          {data.user?.status === 'approved' && (
-            <span title="Skip OTP for this customer's next login (useful when SMS delivery is blocked)">
+          {data.user?.status === 'approved' && !data.user?.otpBypass && (
+            <span title="Let this customer log in with just their phone number (no OTP). Use when SMS delivery is blocked.">
               <Button
                 variant="outline"
                 size="sm"
                 loading={markingVerified}
-                onClick={handleMarkVerified}
+                onClick={() => handleToggleBypass(true)}
               >
-                Send temporary login
+                Enable no-OTP login
               </Button>
             </span>
+          )}
+          {data.user?.status === 'approved' && data.user?.otpBypass && (
+            <>
+              <Badge variant="brand">No-OTP login on</Badge>
+              <Button
+                variant="danger"
+                size="sm"
+                loading={markingVerified}
+                onClick={() => handleToggleBypass(false)}
+              >
+                Turn off
+              </Button>
+            </>
           )}
         </div>
       </div>
