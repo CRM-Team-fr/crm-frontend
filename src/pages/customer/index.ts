@@ -1,0 +1,7 @@
+export { CustomerDashboard } from './Dashboard'
+export { CustomerProfile } from './Profile'
+export { CustomerQuotations } from './Quotations'
+export { CustomerOrders } from './Orders'
+export { CustomerPayments } from './Payments'
+export { CustomerFollowUps } from './FollowUps'
+export { CustomerNotifications } from './Notifications'

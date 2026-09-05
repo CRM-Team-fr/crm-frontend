@@ -1,0 +1,8 @@
+export { SalespersonDashboard } from './Dashboard'
+export { SalespersonCustomers, SalespersonCustomerDetail } from './Customers'
+export { SalespersonFollowUps } from './FollowUps'
+export { SalespersonQuotations } from './Quotations'
+export { SalespersonOrders } from './Orders'
+export { SalespersonPayments } from './Payments'
+export { SalespersonProducts } from './Products'
+export { SalespersonNotifications } from './Notifications'
