@@ -126,15 +126,16 @@ export const AdminCustomerDetail = () => {
             </Button>
           )}
           {data.user?.status === 'approved' && (
-            <Button
-              variant="outline"
-              size="sm"
-              loading={markingVerified}
-              onClick={handleMarkVerified}
-              title="Skip OTP for this customer's next login (useful when SMS delivery is blocked)"
-            >
-              Send temporary login
-            </Button>
+            <span title="Skip OTP for this customer's next login (useful when SMS delivery is blocked)">
+              <Button
+                variant="outline"
+                size="sm"
+                loading={markingVerified}
+                onClick={handleMarkVerified}
+              >
+                Send temporary login
+              </Button>
+            </span>
           )}
         </div>
       </div>
