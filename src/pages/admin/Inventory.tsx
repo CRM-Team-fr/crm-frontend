@@ -7,7 +7,8 @@ import { Button } from '../../components/common/Button'
 import { productsApi } from '../../api'
 import { getImageUrl } from '../../api/client'
 import { StockAdjustmentModal } from '../../components/modals'
-import { Boxes, PackageX, PackageOpen, ArrowDownUp, ImageOff, Search } from 'lucide-react'
+import { InventoryHistoryModal } from '../../components/modals/InventoryHistoryModal'
+import { Boxes, PackageX, PackageOpen, ArrowDownUp, ImageOff, Search, History } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 type Filter = 'all' | 'low_stock' | 'out_of_stock' | 'in_stock'
@@ -18,6 +19,7 @@ export const AdminInventory = () => {
   const [filter, setFilter] = useState<Filter>('all')
   const [query, setQuery] = useState('')
   const [adjust, setAdjust] = useState<null | { id: string; stock: number }>(null)
+  const [historyId, setHistoryId] = useState<string | null>(null)
 
   const { data, isLoading } = useQuery({
     queryKey: ['products'],
@@ -119,7 +121,11 @@ export const AdminInventory = () => {
                         </td>
                         <td className="py-3 pr-0 text-right whitespace-nowrap">
                           <div className="inline-flex gap-2">
-                            <Button size="sm" variant="ghost" onClick={() => navigate(`/admin/products/${p.id}`)}>
+                            <Button size="sm" variant="ghost" onClick={() => setHistoryId(p.id)}>
+                              <History className="h-3.5 w-3.5" />
+                              History
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => navigate(`/admin/products/${p.id}`)}>
                               View
                             </Button>
                             <Button size="sm" onClick={() => setAdjust({ id: p.id, stock: p.stock })}>
@@ -137,6 +143,14 @@ export const AdminInventory = () => {
           )}
         </CardBody>
       </Card>
+
+      {historyId && (
+        <InventoryHistoryModal
+          isOpen={!!historyId}
+          onClose={() => setHistoryId(null)}
+          productId={historyId}
+        />
+      )}
 
       <StockAdjustmentModal
         isOpen={!!adjust}

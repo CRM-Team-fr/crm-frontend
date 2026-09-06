@@ -4,7 +4,7 @@ interface ModalProps {
   isOpen: boolean
   onClose: () => void
   title: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   children: ReactNode
 }
 
@@ -15,6 +15,7 @@ export const Modal = ({ isOpen, onClose, title, size = 'md', children }: ModalPr
     sm: 'max-w-md',
     md: 'max-w-lg',
     lg: 'max-w-2xl',
+    xl: 'max-w-5xl',
   }
 
   return (

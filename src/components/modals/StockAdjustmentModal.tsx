@@ -64,6 +64,8 @@ export const StockAdjustmentModal = ({ isOpen, onClose, productId, currentStock 
       })
       queryClient.invalidateQueries({ queryKey: ['products'] })
       queryClient.invalidateQueries({ queryKey: ['product', productId] })
+      queryClient.invalidateQueries({ queryKey: ['inventoryMovements', productId] })
+      queryClient.invalidateQueries({ queryKey: ['adminDashboard'] })
       onClose()
     } catch (err: any) {
       const msg =

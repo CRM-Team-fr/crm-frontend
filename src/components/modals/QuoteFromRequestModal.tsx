@@ -70,8 +70,18 @@ export const QuoteFromRequestModal = ({ isOpen, onClose, request }: Props) => {
                 <label className="block text-[10px] font-semibold uppercase text-gray-500">Qty</label>
                 <input
                   type="number" min={1}
-                  value={r.quantity}
-                  onChange={(e) => { const nx = [...rows]; nx[i].quantity = parseInt(e.target.value) || 1; setRows(nx) }}
+                  value={r.quantity === 0 ? '' : r.quantity}
+                  onChange={(e) => {
+                    const nx = [...rows]
+                    // Allow empty while editing; parse on submit
+                    nx[i].quantity = e.target.value === '' ? 0 : (parseInt(e.target.value) || 0)
+                    setRows(nx)
+                  }}
+                  onBlur={(e) => {
+                    if (!e.target.value || parseInt(e.target.value) < 1) {
+                      const nx = [...rows]; nx[i].quantity = 1; setRows(nx)
+                    }
+                  }}
                   className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center"
                 />
               </div>

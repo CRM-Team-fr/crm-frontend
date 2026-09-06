@@ -19,6 +19,8 @@ export const AdminReturns = () => {
       queryClient.invalidateQueries({ queryKey: ['returns'] })
       queryClient.invalidateQueries({ queryKey: ['products'] })
       queryClient.invalidateQueries({ queryKey: ['adminDashboard'] })
+      // Any InventoryHistoryModal open on ANY productId will refresh
+      queryClient.invalidateQueries({ queryKey: ['inventoryMovements'] })
     },
     onError: (err: any) => {
       setError(err?.response?.data?.message || 'Failed to update return status.')

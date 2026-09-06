@@ -13,7 +13,8 @@ interface Props {
 
 interface Row {
   productId: string
-  quantity: number
+  /** raw string so users can clear + retype freely */
+  qty: string
 }
 
 export const RequestQuotationModal = ({ isOpen, onClose, customerProfileId }: Props) => {
@@ -26,23 +27,28 @@ export const RequestQuotationModal = ({ isOpen, onClose, customerProfileId }: Pr
   const products: any[] = productsData?.products || []
   const activeProducts = products.filter((p) => p.status === 'active')
 
-  const [rows, setRows] = useState<Row[]>([{ productId: '', quantity: 1 }])
+  const [rows, setRows] = useState<Row[]>([{ productId: '', qty: '1' }])
   const [notes, setNotes] = useState('')
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (isOpen) {
-      setRows([{ productId: '', quantity: 1 }])
+      setRows([{ productId: '', qty: '1' }])
       setNotes('')
       setError('')
     }
   }, [isOpen])
 
+  const parsedRows = rows.map((r) => ({
+    product: r.productId,
+    quantity: parseInt(r.qty) || 0,
+  }))
+
   const submit = useMutation({
     mutationFn: () =>
       quotationRequestsApi.create({
         customerProfileId,
-        items: rows.map((r) => ({ product: r.productId, quantity: r.quantity })),
+        items: parsedRows,
         notes,
       }),
     onSuccess: () => {
@@ -52,7 +58,7 @@ export const RequestQuotationModal = ({ isOpen, onClose, customerProfileId }: Pr
     onError: (err: any) => setError(err?.response?.data?.message || 'Failed to submit.'),
   })
 
-  const canSubmit = rows.every((r) => r.productId && r.quantity > 0) && rows.length > 0
+  const canSubmit = parsedRows.every((r) => r.product && r.quantity > 0) && parsedRows.length > 0
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Request quotation" size="lg">
@@ -83,9 +89,15 @@ export const RequestQuotationModal = ({ isOpen, onClose, customerProfileId }: Pr
               <input
                 type="number"
                 min={1}
-                value={row.quantity}
+                value={row.qty}
                 onChange={(e) => {
-                  const next = [...rows]; next[i] = { ...next[i], quantity: parseInt(e.target.value) || 1 }; setRows(next)
+                  const next = [...rows]; next[i] = { ...next[i], qty: e.target.value }; setRows(next)
+                }}
+                onBlur={() => {
+                  const n = parseInt(rows[i].qty)
+                  if (!n || n < 1) {
+                    const next = [...rows]; next[i] = { ...next[i], qty: '1' }; setRows(next)
+                  }
                 }}
                 className="col-span-3 px-3 py-2 border border-gray-200 rounded-xl text-sm text-center"
                 placeholder="Qty"
@@ -101,7 +113,7 @@ export const RequestQuotationModal = ({ isOpen, onClose, customerProfileId }: Pr
           ))}
           <button
             type="button"
-            onClick={() => setRows([...rows, { productId: '', quantity: 1 }])}
+            onClick={() => setRows([...rows, { productId: '', qty: '1' }])}
             className="text-sm font-semibold text-brand-700 hover:text-brand-800"
           >
             + Add another item

@@ -30,6 +30,7 @@ export const AdminOrders = () => {
       setError('')
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['inventoryMovements'] })
       queryClient.invalidateQueries({ queryKey: ['adminDashboard'] })
     },
     onError: (err: any) => {

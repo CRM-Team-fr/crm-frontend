@@ -27,6 +27,7 @@ export const SalespersonOrders = () => {
       setError('')
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['inventoryMovements'] })
     },
     onError: (err: any) => {
       setError(err?.response?.data?.message || 'Failed to update order status.')
