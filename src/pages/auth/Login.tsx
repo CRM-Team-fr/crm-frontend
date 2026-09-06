@@ -229,7 +229,7 @@ export const Login = () => {
           <div className="h-9 w-9 rounded-xl gradient-brand grid place-items-center text-white">
             <span className="text-sm font-bold">C</span>
           </div>
-          <span className="font-display font-bold text-lg">CRM Studio</span>
+          <span className="font-display font-bold text-lg">BR Corporation</span>
         </div>
         <h1 className="font-display text-3xl font-extrabold text-gray-900 tracking-tight">Welcome back</h1>
         <p className="mt-2 text-sm text-gray-500">Sign in to continue to your workspace.</p>

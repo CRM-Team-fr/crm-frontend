@@ -67,6 +67,20 @@ export const customersApi = {
     return response.data
   },
 
+  updateMyProfile: async (patch: {
+    Name?: string
+    businessName?: string
+    businessType?: string
+    address?: string
+    city?: string
+    state?: string
+    pincode?: string
+    alternatePhoneNumber?: string
+  }) => {
+    const response = await apiClient.patch('/customers/me/profile', patch)
+    return response.data
+  },
+
   getAvailableStages: async () => {
     const response = await apiClient.get('/customers/stages')
     return response.data

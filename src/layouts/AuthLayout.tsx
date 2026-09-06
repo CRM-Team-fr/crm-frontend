@@ -13,7 +13,7 @@ export const AuthLayout = () => {
           <div className="h-10 w-10 rounded-xl bg-white/15 ring-1 ring-white/25 grid place-items-center">
             <Sparkles className="h-5 w-5" />
           </div>
-          <span className="font-display text-xl font-bold tracking-tight">CRM Studio</span>
+          <span className="font-display text-xl font-bold tracking-tight">BR Corporation</span>
         </div>
 
         <div className="relative z-10 max-w-md">
@@ -37,7 +37,7 @@ export const AuthLayout = () => {
         </div>
 
         <div className="relative z-10 text-xs text-white/70">
-          © {new Date().getFullYear()} CRM Studio · Made for wholesale
+          © {new Date().getFullYear()} BR Corporation · Made for wholesale
         </div>
       </div>
 

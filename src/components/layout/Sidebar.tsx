@@ -15,6 +15,7 @@ import {
   LogOut,
   ClipboardList,
   Sparkles,
+  MessageCircle,
 } from 'lucide-react'
 
 const navItems = {
@@ -34,7 +35,7 @@ const navItems = {
   ],
   manager: [
     { to: '/manager/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/manager/quotations', icon: FileText, label: 'Quotation requests' },
+    { to: '/manager/quotation-requests', icon: FileText, label: 'Quotation requests' },
     { to: '/manager/products', icon: Package, label: 'Products' },
     { to: '/manager/inventory', icon: Box, label: 'Inventory' },
     { to: '/manager/performance', icon: BarChart3, label: 'Performance' },
@@ -43,7 +44,8 @@ const navItems = {
   salesperson: [
     { to: '/salesperson/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/salesperson/customers', icon: Users, label: 'Customers' },
-    { to: '/salesperson/followups', icon: ClipboardList, label: 'Follow-ups' },
+    { to: '/salesperson/messages', icon: MessageCircle, label: 'Messages' },
+    { to: '/salesperson/quotation-requests', icon: FileText, label: 'Quotation requests' },
     { to: '/salesperson/quotations', icon: FileText, label: 'Quotations' },
     { to: '/salesperson/orders', icon: ShoppingCart, label: 'Orders' },
     { to: '/salesperson/payments', icon: CreditCard, label: 'Payments' },
@@ -54,10 +56,12 @@ const navItems = {
   customer: [
     { to: '/customer/dashboard', icon: LayoutDashboard, label: 'Home' },
     { to: '/customer/products', icon: Package, label: 'Shop products' },
-    { to: '/customer/quotations', icon: FileText, label: 'Quotations' },
+    { to: '/customer/quotation-requests', icon: FileText, label: 'Ask for quotation' },
+    { to: '/customer/quotations', icon: FileText, label: 'My quotations' },
     { to: '/customer/orders', icon: ShoppingCart, label: 'My orders' },
     { to: '/customer/payments', icon: CreditCard, label: 'Payments' },
     { to: '/customer/returns', icon: ClipboardList, label: 'Returns' },
+    { to: '/customer/messages', icon: MessageCircle, label: 'Messages' },
     { to: '/customer/notifications', icon: Bell, label: 'Notifications' },
     { to: '/customer/profile', icon: Users, label: 'Profile' },
   ],
@@ -75,7 +79,7 @@ export const Sidebar = () => {
           <Sparkles className="h-4 w-4" />
         </div>
         <div>
-          <p className="font-display font-bold text-[15px] tracking-tight leading-none">CRM Studio</p>
+          <p className="font-display font-bold text-[15px] tracking-tight leading-none">BR Corporation</p>
           <p className="text-[11px] text-gray-500 mt-0.5 capitalize">{user?.role} workspace</p>
         </div>
       </div>

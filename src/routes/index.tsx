@@ -7,6 +7,8 @@ import { OrderDetailPage } from '../pages/shared/OrderDetail'
 import { ProductDetailPage } from '../pages/shared/ProductDetail'
 import { QuotationDetailPage } from '../pages/shared/QuotationDetail'
 import { ReturnDetailPage } from '../pages/shared/ReturnDetail'
+import { MessagesPage } from '../pages/shared/Messages'
+import { QuotationRequestsPage } from '../pages/shared/QuotationRequests'
 
 // Auth pages
 import { Login, Register, ChangePassword } from '../pages/auth'
@@ -146,6 +148,8 @@ export const router = createBrowserRouter([
       { path: 'admin/products/:id', element: <ProductDetailPage /> },
       { path: 'admin/quotations/:id', element: <QuotationDetailPage /> },
       { path: 'admin/returns/:id', element: <ReturnDetailPage /> },
+      { path: 'admin/messages', element: <MessagesPage /> },
+      { path: 'admin/quotation-requests', element: <QuotationRequestsPage /> },
       {
         path: 'admin/payments',
         element: <AdminPayments />,
@@ -198,6 +202,7 @@ export const router = createBrowserRouter([
       },
       { path: 'manager/orders/:id', element: <OrderDetailPage /> },
       { path: 'manager/quotations/:id', element: <QuotationDetailPage /> },
+      { path: 'manager/quotation-requests', element: <QuotationRequestsPage /> },
       {
         path: 'manager/payments',
         element: <ManagerPayments />,
@@ -255,6 +260,8 @@ export const router = createBrowserRouter([
       { path: 'salesperson/orders/:id', element: <OrderDetailPage /> },
       { path: 'salesperson/products/:id', element: <ProductDetailPage /> },
       { path: 'salesperson/quotations/:id', element: <QuotationDetailPage /> },
+      { path: 'salesperson/messages', element: <MessagesPage /> },
+      { path: 'salesperson/quotation-requests', element: <QuotationRequestsPage /> },
       {
         path: 'salesperson/payments',
         element: <SalespersonPayments />,
@@ -296,6 +303,9 @@ export const router = createBrowserRouter([
       { path: 'customer/orders/:id', element: <OrderDetailPage /> },
       { path: 'customer/products/:id', element: <ProductDetailPage /> },
       { path: 'customer/quotations/:id', element: <QuotationDetailPage /> },
+      { path: 'customer/messages', element: <MessagesPage /> },
+      { path: 'customer/quotation-requests', element: <QuotationRequestsPage /> },
+      { path: 'customer/returns/:id', element: <ReturnDetailPage /> },
       { path: 'customer/returns/:id', element: <ReturnDetailPage /> },
       {
         path: 'customer/payments',
