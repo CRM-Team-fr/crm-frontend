@@ -36,6 +36,31 @@ export const AdminCustomerDetail = () => {
   const [verifyNotice, setVerifyNotice] = useState('')
   const [error, setError] = useState<string>('')
   const [selectedSalespersonId, setSelectedSalespersonId] = useState('')
+  const [reassigning, setReassigning] = useState(false)
+  const [reassignPickerOpen, setReassignPickerOpen] = useState(false)
+  const [reassignTargetId, setReassignTargetId] = useState('')
+
+  const handleReassign = async () => {
+    if (!data?.user?.id || !reassignTargetId) return
+    if (reassignTargetId === data.assignedSalesperson?.id) {
+      setError('Pick a different salesperson.')
+      return
+    }
+    setError('')
+    setReassigning(true)
+    try {
+      await authApi.assignSalesperson(data.user.id, reassignTargetId)
+      await refetch()
+      setReassignPickerOpen(false)
+      setReassignTargetId('')
+      queryClient.invalidateQueries({ queryKey: ['customers'] })
+      queryClient.invalidateQueries({ queryKey: ['adminDashboard'] })
+    } catch (err: any) {
+      setError(err?.response?.data?.message || 'Failed to reassign.')
+    } finally {
+      setReassigning(false)
+    }
+  }
 
   const handleToggleBypass = async (enable: boolean) => {
     if (!data?.user?.phoneNumber) return
@@ -196,6 +221,62 @@ export const AdminCustomerDetail = () => {
                 </div>
               </div>
             </div>
+
+            {data.user?.status === 'approved' && (
+              <div className="border-t pt-6">
+                <h3 className="text-lg font-semibold mb-1">Assigned salesperson</h3>
+                <p className="text-xs text-gray-500 mb-3">
+                  {data.assignedSalesperson?.Name ? (
+                    <>Currently: <strong>{data.assignedSalesperson.Name}</strong>{data.assignedSalesperson.email && ` · ${data.assignedSalesperson.email}`}</>
+                  ) : (
+                    'Nobody assigned right now.'
+                  )}
+                </p>
+                {!reassignPickerOpen ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setReassignPickerOpen(true)
+                      setReassignTargetId('')
+                    }}
+                  >
+                    {data.assignedSalesperson?.Name ? 'Reassign salesperson' : 'Assign salesperson'}
+                  </Button>
+                ) : (
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-700">
+                      New salesperson
+                    </label>
+                    <select
+                      value={reassignTargetId}
+                      onChange={(e) => setReassignTargetId(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    >
+                      <option value="">Pick a salesperson…</option>
+                      {salespersons
+                        .filter((sp: any) => sp.status !== 'suspended')
+                        .map((sp: any) => (
+                          <option key={sp.id} value={sp.id} disabled={sp.id === data.assignedSalesperson?.id}>
+                            {sp.Name}{sp.id === data.assignedSalesperson?.id ? ' (current)' : ''}
+                          </option>
+                        ))}
+                    </select>
+                    <p className="text-xs text-gray-500">
+                      Full history (orders · payments · quotations · messages · activities) stays with the customer. The new salesperson gets access; the old one loses it.
+                    </p>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="sm" onClick={() => { setReassignPickerOpen(false); setReassignTargetId('') }}>
+                        Cancel
+                      </Button>
+                      <Button size="sm" onClick={handleReassign} loading={reassigning} disabled={!reassignTargetId}>
+                        Confirm reassignment
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {data.user?.status === 'pending' && (
               <div className="border-t pt-6">
