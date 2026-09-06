@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
-import { dashboardsApi } from '../../api'
+import { dashboardsApi, notificationsApi } from '../../api'
 import { LoadingState } from '../../components/common/LoadingState'
 import { Card, CardBody } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
@@ -25,6 +25,14 @@ export const AdminDashboard = () => {
     refetchInterval: 30_000,
     staleTime: 0,
   })
+
+  const { data: notifData } = useQuery({
+    queryKey: ['adminNotifications'],
+    queryFn: async () => notificationsApi.getNotifications({ limit: 8 }),
+    refetchOnWindowFocus: true,
+    refetchInterval: 30_000,
+  })
+  const notifications: any[] = notifData?.notifications || []
 
   if (isLoading) return <LoadingState message="Loading dashboard…" />
 
@@ -104,6 +112,53 @@ export const AdminDashboard = () => {
           onClick={() => navigate('/admin/orders?paymentStatus=unpaid')}
         />
       </div>
+
+      {/* Recent activity */}
+      <Card>
+        <CardBody>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-display text-lg font-bold text-gray-900">Recent activity</h3>
+            <button
+              onClick={() => navigate('/admin/notifications')}
+              className="text-sm font-semibold text-brand-700 hover:text-brand-800 inline-flex items-center gap-1"
+            >
+              See all <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          {notifications.length === 0 ? (
+            <p className="text-sm text-gray-500">No activity yet.</p>
+          ) : (
+            <ul className="divide-y divide-gray-100">
+              {notifications.slice(0, 8).map((n: any) => {
+                const ref = n.referenceEntity?.toLowerCase()
+                const target =
+                  ref === 'order' && n.referenceId ? `/admin/orders/${n.referenceId}` :
+                  ref === 'quotation' && n.referenceId ? `/admin/quotations/${n.referenceId}` :
+                  ref === 'customerprofile' && n.referenceId ? `/admin/customers/${n.referenceId}` :
+                  '/admin/notifications'
+                return (
+                  <li
+                    key={n.id}
+                    onClick={() => navigate(target)}
+                    className="py-3 flex items-start gap-3 cursor-pointer hover:bg-surface-50 -mx-2 px-2 rounded-lg"
+                  >
+                    <span className={`h-2 w-2 rounded-full mt-2 ${n.isRead ? 'bg-gray-300' : 'bg-brand-500'}`} />
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm ${n.isRead ? 'text-gray-700' : 'text-gray-900 font-semibold'}`}>
+                        {n.title || n.type}
+                      </p>
+                      {n.message && <p className="text-xs text-gray-500 mt-0.5 truncate">{n.message}</p>}
+                    </div>
+                    <span className="text-[11px] text-gray-400 whitespace-nowrap">
+                      {new Date(n.createdAt).toLocaleDateString()}
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </CardBody>
+      </Card>
 
       {/* Two column extras */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

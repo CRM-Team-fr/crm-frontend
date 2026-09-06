@@ -50,4 +50,9 @@ export const paymentsApi = {
     const response = await apiClient.get(`/payments/order/${orderId}`)
     return response.data
   },
+
+  deletePayment: async (paymentId: string) => {
+    const response = await apiClient.delete(`/payments/${paymentId}`)
+    return response.data
+  },
 }

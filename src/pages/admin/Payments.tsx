@@ -1,19 +1,31 @@
 import { useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { DataTable } from '../../components/tables/DataTable'
 import { Card, CardBody } from '../../components/common/Card'
 import { Badge } from '../../components/status/StatusBadge'
 import { Button } from '../../components/common/Button'
 import { paymentsApi } from '../../api'
+import { useQueryClient } from '@tanstack/react-query'
 import { IndianRupee, TrendingUp, Wallet, Search } from 'lucide-react'
 
 const money = (n: any) => `₹${(n ?? 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`
 
 export const AdminPayments = () => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const [query, setQuery] = useState('')
   const [method, setMethod] = useState<string>('')
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => paymentsApi.deletePayment(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] })
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['adminDashboard'] })
+    },
+    onError: (err: any) => alert(err?.response?.data?.message || 'Failed to delete payment.'),
+  })
 
   const { data, isLoading } = useQuery({
     queryKey: ['payments'],
@@ -104,6 +116,24 @@ export const AdminPayments = () => {
       header: 'Received by',
       key: 'createdBy',
       render: (item: any) => item.createdBy?.Name || '—',
+    },
+    {
+      header: 'Actions',
+      key: 'actions',
+      render: (item: any) => (
+        <Button
+          size="sm"
+          variant="danger"
+          loading={deleteMutation.isPending && deleteMutation.variables === item.id}
+          onClick={() => {
+            if (confirm(`Delete this payment of ₹${item.amount?.toLocaleString()}? Order outstanding will be restored.`)) {
+              deleteMutation.mutate(item.id)
+            }
+          }}
+        >
+          Delete
+        </Button>
+      ),
     },
   ]
 

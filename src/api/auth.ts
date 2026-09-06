@@ -138,6 +138,11 @@ export const authApi = {
     return response.data
   },
 
+  hardDeleteEmployee: async (employeeId: string) => {
+    const response = await apiClient.delete(`/auth/admin/employees/${employeeId}`)
+    return response.data
+  },
+
   cleanupGhostCustomerUsers: async () => {
     const response = await apiClient.post('/auth/admin/cleanup-ghost-users')
     return response.data

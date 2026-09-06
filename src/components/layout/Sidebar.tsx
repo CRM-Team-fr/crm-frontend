@@ -14,7 +14,6 @@ import {
   Bell,
   LogOut,
   ClipboardList,
-  UserCheck,
   Sparkles,
 } from 'lucide-react'
 
@@ -35,16 +34,10 @@ const navItems = {
   ],
   manager: [
     { to: '/manager/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/manager/team', icon: UserCheck, label: 'Team' },
-    { to: '/manager/customers', icon: Users, label: 'Customers' },
-    { to: '/manager/followups', icon: ClipboardList, label: 'Follow-ups' },
-    { to: '/manager/quotations', icon: FileText, label: 'Quotations' },
-    { to: '/manager/orders', icon: ShoppingCart, label: 'Orders' },
-    { to: '/manager/payments', icon: CreditCard, label: 'Payments' },
+    { to: '/manager/quotations', icon: FileText, label: 'Quotation requests' },
     { to: '/manager/products', icon: Package, label: 'Products' },
     { to: '/manager/inventory', icon: Box, label: 'Inventory' },
     { to: '/manager/performance', icon: BarChart3, label: 'Performance' },
-    { to: '/manager/reports', icon: FileBarChart, label: 'Reports' },
     { to: '/manager/notifications', icon: Bell, label: 'Notifications' },
   ],
   salesperson: [
@@ -65,7 +58,6 @@ const navItems = {
     { to: '/customer/orders', icon: ShoppingCart, label: 'My orders' },
     { to: '/customer/payments', icon: CreditCard, label: 'Payments' },
     { to: '/customer/returns', icon: ClipboardList, label: 'Returns' },
-    { to: '/customer/followups', icon: ClipboardList, label: 'Follow-ups' },
     { to: '/customer/notifications', icon: Bell, label: 'Notifications' },
     { to: '/customer/profile', icon: Users, label: 'Profile' },
   ],

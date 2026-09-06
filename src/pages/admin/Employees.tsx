@@ -64,6 +64,16 @@ export const AdminEmployees = () => {
     },
   })
 
+  const hardDeleteMutation = useMutation({
+    mutationFn: (employeeId: string) => authApi.hardDeleteEmployee(employeeId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['employees'] })
+    },
+    onError: (err: any) => {
+      alert(err?.response?.data?.message || 'Failed to delete employee.')
+    },
+  })
+
   const employees = data?.employees || []
 
   const columns = [
@@ -122,6 +132,20 @@ export const AdminEmployees = () => {
               onClick={() => reactivateMutation.mutate(item.id)}
             >
               Reactivate
+            </Button>
+          )}
+          {item.role !== 'admin' && (
+            <Button
+              size="sm"
+              variant="danger"
+              loading={hardDeleteMutation.isPending && hardDeleteMutation.variables === item.id}
+              onClick={() => {
+                if (confirm(`Permanently delete ${item.Name}? This cannot be undone.`)) {
+                  hardDeleteMutation.mutate(item.id)
+                }
+              }}
+            >
+              Delete
             </Button>
           )}
         </div>

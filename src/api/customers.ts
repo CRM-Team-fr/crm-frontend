@@ -62,6 +62,11 @@ export const customersApi = {
     return response.data
   },
 
+  hardDeleteCustomer: async (customerProfileId: string) => {
+    const response = await apiClient.delete(`/customers/${customerProfileId}`)
+    return response.data
+  },
+
   getAvailableStages: async () => {
     const response = await apiClient.get('/customers/stages')
     return response.data

@@ -35,6 +35,17 @@ export const AdminCustomers = () => {
     )
   }, [allCustomers, q])
 
+  const hardDeleteMutation = useMutation({
+    mutationFn: (customerProfileId: string) => customersApi.hardDeleteCustomer(customerProfileId),
+    onSuccess: async () => {
+      await refetch()
+      setError('')
+    },
+    onError: (err: any) => {
+      setError(err?.response?.data?.message || 'Failed to delete customer.')
+    },
+  })
+
   const cleanupMutation = useMutation({
     mutationFn: () => authApi.cleanupGhostCustomerUsers(),
     onSuccess: async (res: any) => {
@@ -112,9 +123,21 @@ export const AdminCustomers = () => {
               variant="danger"
               onClick={() => setRemovingCustomer(item)}
             >
-              Remove
+              Suspend
             </Button>
           )}
+          <Button
+            size="sm"
+            variant="danger"
+            loading={hardDeleteMutation.isPending && hardDeleteMutation.variables === item.id}
+            onClick={() => {
+              if (confirm(`Permanently delete ${item.businessName}? Blocked if the customer has any orders or payments.`)) {
+                hardDeleteMutation.mutate(item.id)
+              }
+            }}
+          >
+            Delete
+          </Button>
         </div>
       ),
     },
